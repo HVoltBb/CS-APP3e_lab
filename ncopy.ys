@@ -24,11 +24,13 @@ Loop:
 	mrmovq 8(%rdi), %r9	# read val from src...
 	mrmovq 16(%rdi), %r10	# read val from src...
 	mrmovq 24(%rdi), %r11	# read val from src...
+	mrmovq 32(%rdi), %r12
 	
 	rmmovq %r8,  (%rsi)	# ...and store it to dst
 	rmmovq %r9, 8(%rsi)	# ...and store it to dst
 	rmmovq %r10, 16(%rsi)	# ...and store it to dst
 	rmmovq %r11, 24(%rsi)	# ...and store it to dst
+	rmmovq %r12, 32(%rsi)
 
 	andq %r8, %r8
 	jle L3
@@ -43,43 +45,101 @@ L2:
 	iaddq $1, %rax
 L1:
 	andq %r11, %r11
-	jle L4
+	jle L0
 	iaddq $1, %rax
-L4:
-	iaddq $32, %rdi
-	iaddq $32, %rsi
+L0:
+	andq %r12, %r12
+	jle L
+	iaddq $1, %rax
+L:
+	iaddq $40, %rdi
+	iaddq $40, %rsi
 Test:
-	iaddq $-4, %rdx	
+	iaddq $-5, %rdx	
 	jge Loop			# if so, goto Loop:
 
-LessThan4:
-	iaddq $3, %rdx
+LessThan5:
+	iaddq $4, %rdx
 	jl Done
+	iaddq $-1, %rdx
+	jl LL1
+	iaddq $-1, %rdx
+	jl LL2
+	iaddq $-1, %rdx
+	jl LL3
 
+	mrmovq  (%rdi), %r8
+	mrmovq 8(%rdi), %r10	# read val from src...
+	mrmovq 16(%rdi), %r11	# read val from src...
+	mrmovq 24(%rdi), %r12	# read val from src...
+
+	rmmovq %r8, (%rsi)
+	rmmovq %r10, 8(%rsi)	# ...and store it to dst
+	rmmovq %r11, 16(%rsi)	# ...and store it to dst
+	rmmovq %r12, 24(%rsi)	# ...and store it to dst
+	
+	andq %r8, %r8
+	jle X2
+	iaddq $1, %rax
+X2:
+	andq %r10, %r10
+	jle X3
+	iaddq $1, %rax
+X3:
+	andq %r11, %r11
+	jle X4
+	iaddq $1, %rax
+X4:
+	andq %r12, %r12
+	jle Done
+	iaddq $1, %rax
+	jmp Done
+
+LL3:
+	mrmovq  (%rdi), %r8
+	mrmovq 8(%rdi), %r10	# read val from src...
+	mrmovq 16(%rdi), %r11	# read val from src...
+
+	rmmovq %r8, (%rsi)
+	rmmovq %r10, 8(%rsi)	# ...and store it to dst
+	rmmovq %r11, 16(%rsi)	# ...and store it to dst
+	
+	andq %r8, %r8
+	jle X32
+	iaddq $1, %rax
+X32:
+	andq %r10, %r10
+	jle X33
+	iaddq $1, %rax
+X33:
+	andq %r11, %r11
+	jle Done
+	iaddq $1, %rax
+	jmp Done
+
+LL1:
 	mrmovq (%rdi), %r10	# read val from src...
 	rrmovq %rax, %r11
 	iaddq $1, %r11
 	rmmovq %r10, (%rsi)	# ...and store it to dst
 	andq %r10, %r10		# val <= 0?
 	cmovg %r11, %rax
-	iaddq $-1, %rdx
-	jl Done			# if so, goto Loop:
+	jmp Done			# if so, goto Loop:
 
+LL2:
+	mrmovq  (%rdi), %r8
 	mrmovq 8(%rdi), %r10	# read val from src...
-	rrmovq %rax, %r11
-	iaddq $1, %r11
-	rmmovq %r10, 8(%rsi)	# ...and store it to dst
-	andq %r10, %r10		# val <= 0?
-	cmovg %r11, %rax
-	iaddq $-1, %rdx
-	jl Done			# if so, goto Loop:
 
-	mrmovq 16(%rdi), %r10	# read val from src...
-	rrmovq %rax, %r11
-	iaddq $1, %r11
-	rmmovq %r10, 16(%rsi)	# ...and store it to dst
-	andq %r10, %r10		# val <= 0?
-	cmovg %r11, %rax
+	rmmovq %r8, (%rsi)
+	rmmovq %r10, 8(%rsi)	# ...and store it to dst
+	
+	andq %r8, %r8
+	jle X1
+	iaddq $1, %rax
+X1:
+	andq %r10, %r10
+	jle Done
+	iaddq $1, %rax
 
 ##################################################################
 # Do not modify the following section of code
