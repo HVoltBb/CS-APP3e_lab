@@ -7,7 +7,7 @@ Phase 5 is kind of hard, because not all the gadgets you need are properly expla
 
 First, let's review the return oriented programming (ROP). It is a new concept to me, but if you are familiar with it, you can skip this paragraph. ROP is a method to circumvent the stack randomization (or more formally address space layout randomization [ASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization)) in order to take advantage of the buffer overflow bug. I am a person fond of analogies, and I often find they are useful in helping me understand new things. Essentially, what ROP is trying to accomplish is similar to assembling a meaningful sentence from a pool of cutout letters from newspapers or magezines, what a criminal would send as a ransom letter for example. Each of these cutout letters represents a gadget that we use to assemble a meaningful sequence of instructions in our case. We are trying to do the same thing here in phase 4 and 5.
 
-[[https://github.com/HVoltBb/HVoltBb.github.io/blob/master/pics/letters.jpg|alt=cutout_letters]]
+![Cutout letters](https://github.com/HVoltBb/HVoltBb.github.io/blob/master/pics/letters.jpg)
 
 Here is the solving strategy. Things we need to do:
 1. Write the string (cookie) somewhere
