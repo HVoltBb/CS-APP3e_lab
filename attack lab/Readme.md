@@ -11,10 +11,20 @@ First, let's review the return oriented programming (ROP). It is a new concept t
 
 Here is the solving strategy. Things we need to do:
 1. Write the string (cookie) somewhere
+
+
 	a. Where to put the string?
+
+
 	b. How to encode the string? 
+
+
 2. Move the location of the string to %rdi
+
+
 	c. How to get the string location with ASLR, hardcode the address or compute it?
+
+	
 	d. Move it directly or through other registers?
 
 
