@@ -1,6 +1,6 @@
 /* 
  * tsh - A tiny shell program with job control
- * 
+ * syscalls are not properly handled. They should be wrapped arround error checking code
  * <Put your name and login ID here>
  */
 #include <stdio.h>
