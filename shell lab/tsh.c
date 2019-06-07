@@ -194,8 +194,8 @@ void eval(char *cmdline)
     } else {
         //parent
         addjob(jobs, pid, bg?BG:FG, cmdline);
+
         if (!bg){
-            sigprocmask(SIG_SETMASK, &sig_old, NULL);        
             waitfg(pid);
         } else {
             struct job_t *job;
@@ -203,8 +203,9 @@ void eval(char *cmdline)
             printf("[%d] (%d) ", job->jid, jobs->pid);
             printf("%s", job->cmdline);
             fflush(stdout);
-            sigprocmask(SIG_SETMASK, &sig_old, NULL);        
         }
+        
+        sigprocmask(SIG_SETMASK, &sig_old, NULL);
     }
 
     return;
@@ -341,10 +342,14 @@ void do_bgfg(char **argv)
  */
 void waitfg(pid_t pid)
 {
+    sigset_t sig_new;
+    sigemptyset(&sig_new);
     struct job_t *fgjob = getjobpid(jobs, pid);
-    while(fgjob->state == FG)
-        sleep(1);
-    return;
+    while(sigsuspend(&sig_new)){
+        if(fgjob->state != FG){
+            return;
+        }
+    }
 }
 
 /*****************
