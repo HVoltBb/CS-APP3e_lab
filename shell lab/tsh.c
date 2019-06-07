@@ -1,6 +1,8 @@
 /* 
  * tsh - A tiny shell program with job control
  * syscalls are not properly handled. They should be wrapped arround error checking code
+ * this is a solution based on the Fall 2002 handout of the self-study lab
+ * newer labs have io redirections using dup2
  * <Put your name and login ID here>
  */
 #include <stdio.h>
