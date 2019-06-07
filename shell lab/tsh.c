@@ -343,7 +343,10 @@ void do_bgfg(char **argv)
 void waitfg(pid_t pid)
 {
     sigset_t sig_new;
-    sigemptyset(&sig_new);
+    sigfillset(&sig_new);
+    sigdelset(&sig_new, SIGCHLD);
+    sigdelset(&sig_new, SIGINT);
+    sigdelset(&sig_new, SIGTSTP);
     struct job_t *fgjob = getjobpid(jobs, pid);
     while(sigsuspend(&sig_new)){
         if(fgjob->state != FG){
